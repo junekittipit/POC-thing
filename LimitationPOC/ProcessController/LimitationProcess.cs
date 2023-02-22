@@ -40,7 +40,6 @@ namespace LimitationPOC.ProcessController
             var respdb = dbSet.Where(x => LimitationsKeysRequest.Contains(x.LimitationKey) && LimitationsValuesRequest.Contains(x.LimitationValue)).ToList();
             if (respdb != null && respdb.Count > 0)
             {
-                int i = 0;
                 int NeedRule = RuleList.Count;
 
                 foreach (var ruleRequest in RuleList)
@@ -50,10 +49,10 @@ namespace LimitationPOC.ProcessController
                     {
                         foreach (var envKey in SortedEnv)
                         {
-                            var firstlevel = respdb.FirstOrDefault(x => x.LimitationKey == envKey.PKey);
-                            if (firstlevel is not null && !AlreadyGetKey)
+                            var DataLimitations = respdb.FirstOrDefault(x => x.LimitationKey == envKey.PKey);
+                            if (DataLimitations is not null && !AlreadyGetKey)
                             {
-                                foreach (var Rule in firstlevel.LimitationDetails)
+                                foreach (var Rule in DataLimitations.LimitationDetails)
                                 {
                                     if (Rule.Key == ruleRequest)
                                     {
@@ -68,12 +67,10 @@ namespace LimitationPOC.ProcessController
                                             response.Add(respmap);
                                             AlreadyGetKey = true;
                                         }
-                                        continue;
                                     }
 
                                 }
                             }
-                            continue;
                            
                         }
                     }
